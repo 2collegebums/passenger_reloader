@@ -65,7 +65,7 @@ class ReloadServer
         puts "\nPress ^C again to terminate.\nRestarting Server."
         @interrupted = true
         Kernel.sleep 1.5
-        files_need_reloading(true)
+        check_files_need_reloading(true)
       end
     end
   end

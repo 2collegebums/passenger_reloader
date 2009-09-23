@@ -26,15 +26,18 @@ class ReloadServer
 
   def check_files_need_reloading(force=false)
     @interrupted = false
-    if(files_have_changed or force)
+    if(force or files_have_changed)
       `touch #{restart_file = path_to_file('tmp/restart.txt')}`
-      notify('Server Restarting', "Changes have been detected at #{@last_time.strftime('%I:%M:%S %p')}. Restarting application server.") unless force
+      notify('Server Restarting', "Changes have been detected at #{@last_time.strftime('%I:%M:%S %p')}. Restarting application server.")
       @last_time = File.mtime(restart_file)
     end
   end
 
   def files_have_changed
-    file_changed_array = [files_have_changed_in_path(@base_dir + "/config")]
+    watched_dirs = ["config"]
+    #watched_dirs << "vendor/gems"      
+    file_changed_array = watched_dirs.collect{ |dir| files_have_changed_in_path("#{@base_dir}/#{dir}") }
+    
     Dir.glob("#{@base_dir}/vendor/plugins/*/app").each do |f|
       plugin_model_directory = File.dirname(f)
       ["app/models", "lib", "config"].each { |sub| file_changed_array << files_have_changed_in_path(plugin_model_directory + "/#{sub}") }
@@ -62,7 +65,7 @@ class ReloadServer
       if @interrupted then
         break;
       else
-        puts "\nPress ^C again to terminate.\nRestarting Server."
+        puts "\nPress ^C again to terminate.\n"
         @interrupted = true
         Kernel.sleep 1.5
         check_files_need_reloading(true)

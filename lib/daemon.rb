@@ -1,11 +1,29 @@
 class ReloadServer
-  def initialize
-    @base_dir = Dir.pwd
+  def initialize(*args)
+    args.flatten!.compact!
+    @base_dir = (args.size > 0 && args.first.chars.first != '-') ? File.expand_path(args.shift) : Dir.pwd
+    args = ['-c', '-l'] if args.size == 0
+    @watched_dirs = args.collect {|a| convert_to_path(a)}
     @last_time = Time.now
     @interrupted = false
-    notify('Started Reload Server', "Started reload server at #{@last_time.strftime('%I:%M:%S %p')}. Checking for changes in #{@base_dir}")
+    notify('Started Reload Server', "Started reload server at #{@last_time.strftime('%I:%M:%S %p')}. Checking for changes in #{@base_dir} to files in #{@watched_dirs.inspect}.")
     add_sigint_handler
     setup_wait_system
+  end
+
+  def convert_to_path(option)
+    case option.to_s
+    when '-c'
+      'config'
+    when '-l'
+      'lib'
+    when '-g'
+      'vendor/gems'
+    when '-p'
+      'vendor/plugins'
+    else
+      nil
+    end
   end
 
   def run
@@ -34,10 +52,8 @@ class ReloadServer
   end
 
   def files_have_changed
-    watched_dirs = ["config"]
-    #watched_dirs << "vendor/gems"      
-    file_changed_array = watched_dirs.collect{ |dir| files_have_changed_in_path("#{@base_dir}/#{dir}") }
-    
+    file_changed_array = @watched_dirs.collect{ |dir| files_have_changed_in_path("#{@base_dir}/#{dir}") }
+
     Dir.glob("#{@base_dir}/vendor/plugins/*/app").each do |f|
       plugin_model_directory = File.dirname(f)
       ["app/models", "lib", "config"].each { |sub| file_changed_array << files_have_changed_in_path(plugin_model_directory + "/#{sub}") }
@@ -55,9 +71,9 @@ class ReloadServer
   def path_to_file(path)
     @base_dir + "/#{path}"
   end
-  
+
   def current_path_to_file(path)
-    File.dirname(__FILE__) + "/#{path}"  
+    File.dirname(__FILE__) + "/#{path}"
   end
 
   def add_sigint_handler
@@ -87,4 +103,4 @@ class ReloadServer
   end
 end
 
-ReloadServer.new.run
+ReloadServer.new(ARGV).run

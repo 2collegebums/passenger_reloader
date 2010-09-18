@@ -12,18 +12,7 @@ class ReloadServer
   end
 
   def convert_to_path(option)
-    case option.to_s
-    when '-c'
-      'config'
-    when '-l'
-      'lib'
-    when '-g'
-      'vendor/gems'
-    when '-p'
-      'vendor/plugins'
-    else
-      nil
-    end
+    {:c => 'config', :l => 'lib', :g => 'vendor/gems', :p => 'vendor/plugins'}[option.chars.to_a[1].intern]
   end
 
   def run

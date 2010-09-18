@@ -16,9 +16,20 @@ If changes on these paths are detected, the passenger server will be restarted w
 Usage
 ------
 
-Put the three files from this directory into your rails application. We recommend putting these files in your lib directory at `lib/smart_reloader`. Once copied over, simply run the script from the root of rails application with
+ruby lib/smart_reloader/daemon.rb PATH_TO_RAILS_APP OPTIONS_LIST
 
-		[rails_root] $ ruby lib/smart_reloader/daemon.rb
+Options
+
+ * -l lib
+ * -c config
+ * -g vendor/gems
+ * -p vendor/plugins
+
+ * the default options are -l and -c
+
+Example call
+		
+ruby lib/smart_reloader/daemon.rb ~/apps/my_app -l -c -g
 		
 If you are using mac os x, it will smartly observe FSEvent to prevent the need for file polling. If on a linux distribution it will fall back to file polling. If there is a hook on linux, we would like a patch. On mac the notifications will be using growl and growlnotify. If not, the notifications will be directed to stdout.
 

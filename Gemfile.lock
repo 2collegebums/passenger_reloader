@@ -1,0 +1,15 @@
+PATH
+  remote: .
+  specs:
+    passenger_reloader (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (>= 1.0.0)
+  passenger_reloader!

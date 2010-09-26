@@ -4,6 +4,9 @@ require File.expand_path("../lib/passenger_reloader/version", __FILE__)
 Gem::Specification.new do |s|
   # About this gem
   s.name = %q{passenger_reloader}
+  s.version     = PassengerReloader::VERSION
+  s.platform    = Gem::Platform::RUBY
+
   s.authors     = ['Thomas Shafer', 'Nathan Esquenazi']
   s.date        = %q{2010-09-25}
   s.description = %q{Reloades Passenger on non cached object changes}
@@ -19,15 +22,7 @@ Gem::Specification.new do |s|
 
 
   # Other stuff
-  s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = ">= 1.3.6"
+  s.add_development_dependency "bundler", ">= 1.0.0"
 
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-    else
-    end
-  else
-  end
 end

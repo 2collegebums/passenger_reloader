@@ -1,3 +1,4 @@
+module PassengerReloader
 class ReloadServer
   def initialize(*args)
     args.flatten!.compact!
@@ -91,5 +92,5 @@ class ReloadServer
     @using_mac ||= RUBY_PLATFORM.sub(/^.*?darwin(\d+).*$/, '\1').to_i >= 9
   end
 end
+end
 
-ReloadServer.new(ARGV).run

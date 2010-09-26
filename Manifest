@@ -1,0 +1,6 @@
+README.markdown
+Rakefile
+lib/daemon.rb
+lib/fsevent_sleep
+lib/restart_icon.png
+Manifest

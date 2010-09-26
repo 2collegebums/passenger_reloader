@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path("../lib/terminitor/version", __FILE__)
+require File.expand_path("../lib/passenger_reloader/version", __FILE__)
 
 Gem::Specification.new do |s|
   # About this gem
